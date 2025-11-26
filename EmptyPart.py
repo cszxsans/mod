@@ -8,27 +8,27 @@ class EmptyPart(PartBase):
 	def __init__(self):
 		PartBase.__init__(self)
 		# 零件名称
+		print("初始化")
+		self.cntdead = 0
 		self.name = "空零件"
 
 	def InitClient(self):
 		"""
 		@description 客户端的零件对象初始化入口
 		"""
-		pass
+		print("客户端初始化")
 
-	def InitServer(self):
-		import mod.server.extraServerApi as serverApi
-		self.ListenForEvent(serverApi.GetEngineNamespace(), serverApi.GetEngineSystemName(), "ServerChatEvent", self, self.OnServerChat)		
+	def InitServer(self):		
+		print("服务端初始化")
 
-	def OnServerChat(self,args):
-		import mod.server.extraServerApi as serverApi
-		comp = serverApi.GetEngineCompFactory().CreateWeather(serverApi.GetLevelId())
-		if args["message"] == "下雨":	
-			comp.SetRaining(0.5,1000)
-		elif args["message"] == "停雨":
-			comp.SetRaining(0,1000)
-		elif args["message"] == "打雷":
-			comp.SetThunder(0.5,1000)
+	def PlayerDieEvent(self,args):
+		print("玩家死亡")
+		parent = self.GetParent()
+		entityId = parent.GetEntityId()
+		if args["id"] != entityId:
+			return
+		cntdead += 1
+		print(cntdead)
 
 	def TickClient(self):
 		"""
