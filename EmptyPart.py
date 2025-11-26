@@ -2,14 +2,13 @@
 from Preset.Model.PartBase import PartBase
 from Preset.Model.GameObject import registerGenericClass
 
-
+cntdead = 0
 @registerGenericClass("EmptyPart")
 class EmptyPart(PartBase):
 	def __init__(self):
 		PartBase.__init__(self)
 		# 零件名称
 		print("初始化")
-		self.cntdead = 0
 		self.name = "空零件"
 
 	def InitClient(self):
@@ -20,13 +19,17 @@ class EmptyPart(PartBase):
 
 	def InitServer(self):		
 		print("服务端初始化")
+		import mod.server.extraServerApi as serverApi
+		serverSystem = serverApi.GetSystem("Minecraft", "preset")
+		serverSystem.ListenForEvent(serverApi.GetEngineNamespace(), serverApi.GetEngineSystemName(), "PlayerDieEvent", self, self.PlayerDie)
 
-	def PlayerDieEvent(self,args):
+
+	def PlayerDie(self,args):
 		print("玩家死亡")
 		parent = self.GetParent()
 		entityId = parent.GetEntityId()
-		if args["id"] != entityId:
-			return
+		"""if args["id"] != entityId:
+			return"""
 		cntdead += 1
 		print(cntdead)
 
