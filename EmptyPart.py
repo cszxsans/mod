@@ -2,7 +2,7 @@
 from Preset.Model.PartBase import PartBase
 from Preset.Model.GameObject import registerGenericClass
 
-cntdead = 0
+cntdead = 1
 @registerGenericClass("EmptyPart")
 class EmptyPart(PartBase):
 	def __init__(self):
